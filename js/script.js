@@ -51,50 +51,50 @@ document.addEventListener('DOMContentLoaded', function() {
         scrollToElement(target_faq);
     });
 
-    submit_button.addEventListener('click', function(){
-        let is_send = true
-        const inputs = document.querySelectorAll("input")
-        console.log(inputs)
-        inputs.forEach(item =>{
-            console.log(item.value.trim())
-            if (item.value.trim() == "")
-            {
-                item.style.backgroundColor = "#C41E3A"
-                
-                item.style.borderColor = 'rgba(0, 0, 0, 1)'
-                is_send = false
-            }else{
-                item.style.backgroundColor = "#E3EEFF"
-                item.style.borderColor = 'rgba(0, 0, 0, 0.25)'
+    
+    submit_button.addEventListener('click', function() { // Добавляем обработчик события 'click' для элемента submit_button
+        let is_send = true; // Инициализируем переменную is_send значением true, которая будет использоваться для проверки, можно ли отправить форму
+        const inputs = document.querySelectorAll("input"); // Выбираем все элементы input на странице и сохраняем их в переменную inputs
+        
+        inputs.forEach(item => { // Перебираем каждый элемент input из переменной inputs
+            
+            if (item.value.trim() == "") { // Проверяем, пустое ли значение в поле
+                item.style.backgroundColor = "#C41E3A"; // Если значение пустое, то делаем фон элемента красным
+                item.style.borderColor = 'rgba(0, 0, 0, 1)'; // Устанавливаем цвет границы элемента input в черный
+                is_send = false; // Устанавливаем переменную is_send в false, так как форма не может быть отправлена из-за пустого поля
+            } else {
+                item.style.backgroundColor = "#E3EEFF"; // Если значение не пустое, устанавливаем фон элемента input в голубой цвет
+                item.style.borderColor = 'rgba(0, 0, 0, 0.25)'; // Устанавливаем цвет границы элемента input в полупрозрачный черный
             }
-        })
-        if (is_send){
-            submit_button.textContent = "Отправлено!"
-            console.log("хуй")
-        }else{
-            submit_button.textContent = "Заполните пустые поля" 
+        });
+
+        
+        if (is_send) { // Проверяем значение переменной is_send
+            submit_button.textContent = "Отправлено!"; // Если is_send равно true, изменяем текст кнопки submit_button на "Отправлено!"
+        } else {
+            submit_button.textContent = "Заполните пустые поля"; // Если is_send равно false, изменяем текст кнопки submit_button на "Заполните пустые поля"
         }
     });
+
     
-    let is_scrolling = false
-    function scrollToElement(element) {
-        let topOffset = element.getBoundingClientRect().top + window.scrollY - headerHeight;
-        window.scrollTo({
+    
+    let is_scrolling = false; // Инициализируем переменную is_scrolling значением false, которая будет использоваться для отслеживания состояния прокрутки
+    function scrollToElement(element) { // Определяем функцию scrollToElement, которая принимает элемент в качестве аргумента
+        let topOffset = element.getBoundingClientRect().top + window.scrollY - headerHeight; // Вычисляем вертикальное смещение элемента относительно верхней части окна браузера, учитывая высоту заголовка
+        window.scrollTo({ // Прокручиваем окно браузера до вычисленного смещения с плавной анимацией
             top: topOffset,
             behavior: 'smooth'
         });
-        is_scrolling = true;
-
-        if (scrollTimeout) {
-            clearTimeout(scrollTimeout);
+        is_scrolling = true; // Устанавливаем переменную is_scrolling в true, чтобы указать, что прокрутка началась
+        if (scrollTimeout) { // Проверяем, существует ли таймер scrollTimeout
+            clearTimeout(scrollTimeout); // Если таймер существует, очищаем его, чтобы предотвратить выполнение предыдущего таймера
         }
-
-        scrollTimeout = setTimeout(() => {
-            is_scrolling = false;
-            updateActiveButton()
-            console.log('Scrolling has ended');
-        }, 750); 
+        scrollTimeout = setTimeout(() => { // Устанавливаем новый таймер scrollTimeout, который через 750 миллисекунд выполнит функцию
+            is_scrolling = false; // Устанавливаем переменную is_scrolling в false, чтобы указать, что прокрутка завершена
+            updateActiveButton(); // Вызываем функцию updateActiveButton для обновления состояния активной кнопки
+        }, 750);
     }
+
 
     
 
@@ -135,23 +135,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    const faqItems = document.querySelectorAll('.faq-item');
 
-    faqItems.forEach(item => {
-        const toggleButton = item.querySelector('.faq-question');
-        const plus = item.querySelector('.faq-toggle')
-        const answer = item.querySelector('.faq-answer');
 
-        toggleButton.addEventListener('click', () => {
-            if (answer.style.maxHeight) {
-                answer.style.maxHeight = null;
-                plus.textContent = '+';
-            } else {
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-                plus.textContent = '-';
-            }
-        });
+// Выбираем все элементы с классом 'faq-item' и сохраняем их в переменную faqItems
+const faqItems = document.querySelectorAll('.faq-item');
+// Перебираем каждый элемент из faqItems
+faqItems.forEach(item => {
+    // Внутри каждого элемента faq-item находим элемент с классом 'faq-question' и сохраняем его в переменную toggleButton
+    const toggleButton = item.querySelector('.faq-question');
+    // Внутри каждого элемента faq-item находим элемент с классом 'faq-toggle' и сохраняем его в переменную plus
+    const plus = item.querySelector('.faq-toggle');
+    // Внутри каждого элемента faq-item находим элемент с классом 'faq-answer' и сохраняем его в переменную answer
+    const answer = item.querySelector('.faq-answer'); 
+    toggleButton.addEventListener('click', () => { // Добавляем обработчик события 'click' для элемента toggleButton
+        // Проверяем, есть ли у элемента answer стиль maxHeight
+        if (answer.style.maxHeight) {
+            answer.style.maxHeight = null; // Если стиль maxHeight существует, сбрасываем его, чтобы скрыть ответ
+            plus.textContent = '+'; // Меняем текст элемента plus на '+'
+        } else {
+            // Если стиль maxHeight не существует, устанавливаем его равным scrollHeight элемента answer, чтобы показать ответ
+            answer.style.maxHeight = answer.scrollHeight + 'px';
+            // Меняем текст элемента plus на '-'
+            plus.textContent = '-';
+        }
     });
+});
+
     
     
     window.addEventListener('scroll', updateActiveButton);
